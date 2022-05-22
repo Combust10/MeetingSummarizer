@@ -1,4 +1,5 @@
 import subprocess
+import threading
 import tkinter
 import customtkinter  # <- import the CustomTkinter module
 from tkinter import filedialog
@@ -7,6 +8,8 @@ import os
 
 customtkinter.set_appearance_mode("dark")  # Modes: "System" (standard), "Dark", "Light"
 # customtkinter.set_default_color_theme("blue")  # Themes: "blue" (standard), "green", "dark-blue"
+
+#Replace <command=example> with <command=threading.Thread(target=example).start>
 
 root_tk = customtkinter.CTk()  # create CTk window like you do with the Tk window (you can also use normal tkinter.Tk window)
 root_tk.geometry("1250x700")
@@ -66,12 +69,12 @@ label_3.place(relx=0.15,rely=0.20)
 image_size=175
 mic_image = ImageTk.PhotoImage(Image.open(r"guistuff/mic.png").resize((image_size, image_size)))
 
-button_img = customtkinter.CTkButton(master=frame_1, corner_radius=8,image=mic_image,text="",fg_color="White", command=button_function,width=250,height=250,text_font=("Sans",18))
+button_img = customtkinter.CTkButton(master=frame_1, corner_radius=8,image=mic_image,text="",fg_color="White", command=threading.Thread(target=button_function).start,width=250,height=250,text_font=("Sans",18))
 button_img.pack(pady=300, padx=10)
 button_img.place(relx=0.13,rely=0.30)
 
 #############
-button_1 = customtkinter.CTkButton(master=frame_1, corner_radius=8,text="Summarize", command=sumbutton,width=150,height=45,text_font=("Sans",18))
+button_1 = customtkinter.CTkButton(master=frame_1, corner_radius=8,text="Summarize", command=threading.Thread(target=sumbutton).start,width=150,height=45,text_font=("Sans",18))
 button_1.pack(pady=300, padx=10)
 button_1.place(relx=0.45,rely=0.8)
 
