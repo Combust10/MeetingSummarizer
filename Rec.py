@@ -10,6 +10,12 @@ import pyaudio
 import wave
 import shutil
 
+global flag1
+flag1=1
+
+with open('Transcripts/transcript.txt') as f:
+    lines = f.readlines()
+lines = lines[0]
 
 
 
@@ -18,10 +24,7 @@ import shutil
 
 
 
-
-
-
-CHUNK = 1024
+CHUNK = 256
 FORMAT = pyaudio.paInt16
 CHANNELS = 2
 RATE = 44100
@@ -40,7 +43,14 @@ print("* recording")
 
 frames = []
 
-for i in range(0, int(RATE / CHUNK * RECORD_SECONDS)):
+#for i in range(0, int(RATE / CHUNK * RECORD_SECONDS)):
+#    data = stream.read(CHUNK)
+#    frames.append(data)
+while (lines == '1'):
+    with open('Transcripts/transcript.txt') as f:
+        lines = f.readlines()
+    lines = lines[0]
+
     data = stream.read(CHUNK)
     frames.append(data)
 

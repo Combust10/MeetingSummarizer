@@ -5,6 +5,7 @@ import customtkinter  # <- import the CustomTkinter module
 from tkinter import filedialog
 from PIL import Image, ImageTk  # <- import PIL for the images
 import os
+import pyaudio
 
 customtkinter.set_appearance_mode("dark")  # Modes: "System" (standard), "Dark", "Light"
 # customtkinter.set_default_color_theme("blue")  # Themes: "blue" (standard), "green", "dark-blue"
@@ -15,8 +16,11 @@ root_tk = customtkinter.CTk()  # create CTk window like you do with the Tk windo
 root_tk.geometry("1150x700")
 root_tk.title("Realtime Meeting Summarizer")
 
+
 global flag
 flag=0
+global recflag
+recflag = 0
 
 def setflagt():
     global flag
@@ -30,8 +34,32 @@ def setflag():
 
 
 def button_function():
-    p2=subprocess.Popen(["python","Rec.py"],shell=True)
-    p2.wait()
+    global recflag
+    #p2=subprocess.Popen(["python","Rec.py"],shell=True)
+    #p2.wait()
+    recflag = (recflag+1)%2
+    if (recflag == 0):
+
+
+        p2=subprocess.Popen(["python","writeflag.py"],shell=True)
+        p2.wait
+        button_img = customtkinter.CTkButton(master=frame_1, corner_radius=170, image=mic_image, text="",
+                                             fg_color="red", command=threading.Thread(target=button_function).start, width=250, height=250,
+                                             border_color="red", border_width=2)
+        button_img.pack(pady=300, padx=10)
+        button_img.place(relx=0.10, rely=0.30)
+        praudio = subprocess.Popen(["python", "Rec.py"], shell=True)
+        praudio.wait()
+    else:
+        p2 = subprocess.Popen(["python", "writeflag.py"], shell=True)
+        p2.wait
+        button_img = customtkinter.CTkButton(master=frame_1, corner_radius=170, image=mic_image, text="",
+                                             fg_color="white", command=threading.Thread(target=button_function).start,
+                                             width=250, height=250,
+                                             border_color="white", border_width=2)
+        button_img.pack(pady=300, padx=10)
+        button_img.place(relx=0.10, rely=0.30)
+
 
 def sumbutton():
     p3 = subprocess.Popen(["python", "sumpart.py"], shell=True)
@@ -104,3 +132,4 @@ s_var = tkinter.StringVar(value="on")
 
 
 root_tk.mainloop()
+
