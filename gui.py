@@ -67,10 +67,9 @@ def button_function():
                                              border_color="white", border_width=2)
         button_img.pack(pady=300, padx=10)
         button_img.place(relx=0.10, rely=0.30)
-       # button_1['state'] = tkinter.DISABLED
-        #button_img['state']= tkinter.DISABLED
         button_1.configure(state=DISABLED)
         button_img.configure(state=DISABLED)
+        entry_1.configure(state=DISABLED)
         iloadingwords = "Converting from speech to text...."
 
         while (newfno == fileno):
@@ -82,6 +81,7 @@ def button_function():
         status_label['text'] = "Converted"
         button_1.configure(state=NORMAL)
         button_img.configure(state=NORMAL)
+        entry_1.configure(state=NORMAL)
 
 
 def sumbutton():
