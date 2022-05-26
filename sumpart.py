@@ -1,4 +1,6 @@
 #pip install transformers[sentencepiece]
+#pip install torch torchvision torchaudio
+
 from transformers import AutoTokenizer, AutoModelForSeq2SeqLM
 import nltk
 
@@ -15,7 +17,7 @@ tokenizer = AutoTokenizer.from_pretrained(checkpoint)
 model = AutoModelForSeq2SeqLM.from_pretrained(checkpoint)
 
 
-nltk.download('punkt')
+#nltk.download('punkt')
 sentences = nltk.tokenize.sent_tokenize(text)
 
 length = 0
