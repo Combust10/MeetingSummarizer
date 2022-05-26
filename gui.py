@@ -1,8 +1,10 @@
 import subprocess
 import threading
+import time
 import tkinter
 import customtkinter  # <- import the CustomTkinter module
-from tkinter import filedialog
+from tkinter import filedialog, HORIZONTAL, DISABLED, NORMAL
+from tkinter.ttk import Progressbar
 from PIL import Image, ImageTk  # <- import PIL for the images
 import os
 import pyaudio
@@ -17,10 +19,13 @@ root_tk.geometry("1150x700")
 root_tk.title("Realtime Meeting Summarizer")
 
 
+
 global flag
 flag=0
 global recflag
 recflag = 0
+global wflag
+wflag = 0
 
 def setflagt():
     global flag
@@ -35,21 +40,24 @@ def setflag():
 
 def button_function():
     global recflag
+    global wflag
+    fileno = len(os.listdir('Transcripts'))
+    newfno = fileno
+    counter=0
     #p2=subprocess.Popen(["python","Rec.py"],shell=True)
     #p2.wait()
     recflag = (recflag+1)%2
-    if (recflag == 0):
+    if (recflag == 1):
 
 
         p2=subprocess.Popen(["python","writeflag.py"],shell=True)
-        p2.wait
         button_img = customtkinter.CTkButton(master=frame_1, corner_radius=170, image=mic_image, text="",
                                              fg_color="red", command=threading.Thread(target=button_function).start, width=250, height=250,
                                              border_color="red", border_width=2)
         button_img.pack(pady=300, padx=10)
         button_img.place(relx=0.10, rely=0.30)
         praudio = subprocess.Popen(["python", "Rec.py"], shell=True)
-        praudio.wait()
+       # praudio.wait()
     else:
         p2 = subprocess.Popen(["python", "writeflag.py"], shell=True)
         p2.wait
@@ -59,6 +67,21 @@ def button_function():
                                              border_color="white", border_width=2)
         button_img.pack(pady=300, padx=10)
         button_img.place(relx=0.10, rely=0.30)
+       # button_1['state'] = tkinter.DISABLED
+        #button_img['state']= tkinter.DISABLED
+        button_1.configure(state=DISABLED)
+        button_img.configure(state=DISABLED)
+        iloadingwords = "Converting from speech to text...."
+
+        while (newfno == fileno):
+            counter = counter + 1;
+            newfno = len(os.listdir('Transcripts'))
+            time.sleep(1)
+            loadingwords = iloadingwords[:31+(counter % 4)]
+            status_label['text'] = loadingwords
+        status_label['text'] = "Converted"
+        button_1.configure(state=NORMAL)
+        button_img.configure(state=NORMAL)
 
 
 def sumbutton():
@@ -84,6 +107,9 @@ frame_1.pack(pady=20, padx=30, fill="both", expand=True)
 label_1 = customtkinter.CTkLabel(master=frame_1,text="REALTIME MEETING SUMMARIZER",width=220,height=55,text_font=("Calibri",32),fg_color="Grey")
 label_1.pack(pady=y_padding, padx=30)
 
+status_label = customtkinter.CTkLabel(master=frame_1, text="", width=220, height=10,text_font=("Calibri", 16))
+status_label.pack(pady=y_padding, padx=30)
+
 #Right part
 radiobutton_var = tkinter.IntVar(value=1)
 
@@ -103,7 +129,7 @@ entry_1 = customtkinter.CTkEntry(master=frame_1, placeholder_text="Filepath...")
 entry_1.pack(pady=y_padding, padx=10)
 entry_1.place(relx=0.675,rely=0.50)
 
-button_2 = customtkinter.CTkButton(master=frame_1, corner_radius=8,text="Upload File", command=open)
+button_2 = customtkinter.CTkButton(master=frame_1, corner_radius=8,text="Upload File", command=open,state=NORMAL)
 button_2.pack(pady=y_padding, padx=30)
 button_2.place(relx=0.79,rely=0.50)
 
@@ -119,12 +145,12 @@ image_size=160
 mic_image = ImageTk.PhotoImage(Image.open(r"guistuff/mic.png").resize((image_size, image_size)))
 
 button_img = customtkinter.CTkButton(master=frame_1, corner_radius=8,image=mic_image,text="",fg_color="White", command=threading.Thread(target=button_function).start,width=250,height=250,text_font=("Sans",18))
-button_img = customtkinter.CTkButton(master=frame_1, corner_radius=170,image=mic_image,text="",fg_color="White", command=button_function,width=250,height=250,border_color="White",border_width=2)
+button_img = customtkinter.CTkButton(master=frame_1, corner_radius=170,image=mic_image,text="",fg_color="White", command=button_function,width=250,height=250,border_color="White",border_width=2,state=NORMAL)
 button_img.pack(pady=300, padx=10)
 button_img.place(relx=0.10,rely=0.30)
 
 #############
-button_1 = customtkinter.CTkButton(master=frame_1, corner_radius=8,text="Summarize", command=threading.Thread(target=sumbutton).start,width=150,height=45,text_font=("Sans",18))
+button_1 = customtkinter.CTkButton(master=frame_1, corner_radius=8,text="Summarize", command=threading.Thread(target=sumbutton).start,width=150,height=45,text_font=("Sans",18),state=NORMAL)
 button_1.pack(pady=300, padx=10)
 button_1.place(relx=0.45,rely=0.8)
 
